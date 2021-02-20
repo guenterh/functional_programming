@@ -50,3 +50,10 @@ lazy val slides = project
 
 
 addCommandAlias("testAnswers", "answers/test")
+
+
+lazy val gh = project
+  .settings(moduleName := "ghtests")
+  .settings(baseSettings: _*)
+
+
