@@ -20,6 +20,7 @@ lazy val baseSettings: Seq[Setting[_]] = Seq(
   libraryDependencies ++= Seq(
     kantanGeneric,
     scalatest,
+
   )
 )
 
@@ -27,8 +28,8 @@ lazy val foundation = project
   .in(file("."))
   .settings(moduleName := "foundation")
   .settings(baseSettings: _*)
-  .aggregate(exercises, answers)
-  .dependsOn(exercises, answers)
+  .aggregate(exercises, answers, gh, gh1)
+  .dependsOn(exercises, answers, gh, gh1)
 
 lazy val exercises = project
   .settings(moduleName := "foundation-exercises")
@@ -54,6 +55,10 @@ addCommandAlias("testAnswers", "answers/test")
 
 lazy val gh = project
   .settings(moduleName := "ghtests")
+  .settings(baseSettings: _*)
+
+lazy val gh1 = project
+  .settings(moduleName := "ghtests1")
   .settings(baseSettings: _*)
 
 

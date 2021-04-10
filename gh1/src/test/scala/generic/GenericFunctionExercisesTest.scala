@@ -1,6 +1,6 @@
-package exercises.generic
+package generic
 
-import exercises.generic.GenericFunctionExercises.{Pair, decoded, products, secret}
+import generic.GenericFunctionExercises.{Pair, decoded, secret}
 import org.scalatest.funsuite.AnyFunSuite
 import org.scalatestplus.scalacheck.ScalaCheckDrivenPropertyChecks
 
@@ -11,33 +11,25 @@ class GenericFunctionExercisesTest extends AnyFunSuite with ScalaCheckDrivenProp
   ////////////////////
 
   test("Pair swap") {
-    assert(Pair(0,1).swap == Pair(1,0))
-    assert(Pair("John", "Doe").swap == Pair("Doe", "John"))
+    assert(Pair(1,2).swap == Pair(2,1))
+    assert(Pair("zero","one").swap == Pair("one","zero"))
   }
 
   test("Pair map") {
-    assert(Pair("Günter", "Hipler").map(_.length) == Pair(6,6))
-    assert(Pair("Günter", "Hipler").map(identity) == Pair("Günter", "Hipler"))
+    assert(Pair(0,1).map(identity) == Pair(0,1))
+
   }
 
   test("Pair decoded") {
 
-    assert(secret.map(bytes => new String(bytes.toArray))
-      .map(_.reverse)
-      .swap ==  Pair("Functional", "Programming"))
 
   }
 
   test("Pair zipWith") {
-
-    assert((Pair(1,2).zipWith(Pair(3,4))((f,s) =>  f * 2 + s)) == Pair(5,8))
-    assert(Pair(0, 2).zipWith(Pair(3, 4))((x, y) => x + y) == Pair(3, 6))
-
+    assert(Pair(1,2).zipWith(Pair(3,4))((first,second) => first * second) == Pair(3,8))
   }
 
-  test("Pair productNames") {
-    println(products)
-  }
+  test("Pair productNames") {}
 
   ////////////////////////////
   // Exercise 2: Predicate
