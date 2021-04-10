@@ -103,8 +103,8 @@ object GenericFunctionExercises {
   }
 
   // 2d. Implement `isValidUser`, a predicate which checks if a `User` is:
-  // * an adult (18 years old or more) and
-  // * their name is longer than 3 characters and
+  // * an adult (older than 18 year) and
+  // * their name is longer than or equal to 3 characters and
   // * their name is capitalized, meaning that it starts with an uppercase letter
   // such as isValidUser(User("John", 20)) == true
   // but     isValidUser(User("John", 17)) == false // user is not an adult
@@ -190,6 +190,7 @@ object GenericFunctionExercises {
   // * "\"2020-08-03\"" into a Some(LocalDate.of(2020,08,3))
   // * "\"null\"" into a Some("null")
   // * "null" into "None"
+  // Note: you may need to change the function signature
   def optionDecoder[A]: JsonDecoder[Option[A]] =
     ???
 
