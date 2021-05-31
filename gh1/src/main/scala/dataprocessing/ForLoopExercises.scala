@@ -3,24 +3,30 @@ package dataprocessing
 object ForLoopExercises {
 
   def sum(numbers: List[Int]): Int = {
+/*
     var total = 0
-
     for (number <- numbers)
       total += number
-
     total
+*/
+
+  foldLeft(numbers,0)((state,number) => state + number)
+
   }
 
   // a. Implement `size` using a mutable state and a for loop
   // such as size(List(2,5,1,8)) == 4
   // and     size(Nil) == 0
   def size[A](items: List[A]): Int = {
-    var s = 0
-    for (_ <- items)
-      s += 1
+    /*
+    var tempSize: Int = 0
+    items.foreach(_ => tempSize += 1)
+    tempSize
+*/
+    foldLeft(items,0)((state, item) => state + 1)
 
-    s
   }
+
 
   // b. Implement `min` using a mutable state and a for loop
   // such as min(List(2,5,1,8)) == Some(1)
@@ -29,20 +35,31 @@ object ForLoopExercises {
   // * Some when there is a value and
   // * None when there is no value (a bit like null)
   def min(numbers: List[Int]): Option[Int] = {
-    var state: Option[Int] = None
+    var tempMin: Option[Int] = None
 
+    /*
+    //case analysis
 
-    for (number <- numbers) {
-      state match {
-        case None   => state = Some(number)
-        //case Some(currentMin) if currentMin >= number => state = Some(number)
-        case Some(currentMin)  => state = Some(number min currentMin)
+    for (number <- numbers) if (tempMin.getOrElse(number) >= number) tempMin = Some(number)
+
+    //Lösung im Kurs
+    var tempMin1 = Option.empty[Int]
+
+    for (number <- numbers ) {
+      tempMin1 match {
+        case None => tempMin1 = Some(number)
+        case Some(currentMin) => tempMin1 = Some(currentMin min number)
       }
     }
 
-    state
-  }
+    tempMin1
 
+
+     */
+
+    foldLeft(numbers, Option.empty[Int])((state, elem) => Some(state.getOrElse(elem) min elem))
+
+  }
 
   // c. Implement `wordCount` using a mutable state and a for loop.
   // `wordCount` compute how many times each word appears in a `List`
@@ -50,13 +67,58 @@ object ForLoopExercises {
   // and     wordCount(Nil) == Map.empty
   // Note: You can lookup an element in a `Map` with the method `get`
   // and you can upsert a value using `updated`
-  def wordCount(words: List[String]): Map[String, Int] =
-    ???
+  def wordCount(words: List[String]): Map[String, Int] = {
+
+    /*
+    var counted = Map[String,Int]().empty
+
+    for {
+    word <- words
+    } if (counted.contains(word)) counted.updated(word, counted(word) + 1) else counted.updated(word) = 1
+
+    counted
+
+     */
+    //other possibility
+
+    /*
+    var frequencies = Map[String,Int]()
+    for (word <- words) {
+      //frequencies.get(word) match {
+      //  case Some(frequency) => frequencies = frequencies.updated(word,frequency + 1)
+      //  case None => frequencies =  frequencies.updated(word,1)
+      //}
+      //val frequency = frequencies.getOrElse(word,0)
+      //frequencies = frequencies.updated(word,frequency + 1)
+
+      //und noch eine weitere Möglichkeit
+      frequencies = frequencies.updatedWith(word)(value => Some(value.getOrElse(0) + 1))
+
+    }
+    frequencies
+
+    */
+
+    foldLeft(words,Map.empty[String,Int])((status, elem) =>
+    status.updatedWith(elem)(value => Some(value.getOrElse(0) + 1))
+    )
+
+
+  }
+
+
 
   // d. `sum`, `size`, `min` and `wordCount` are quite similar.
   // Could you write a higher-order function that captures this pattern?
   // How would you call it?
-  def pattern = ???
+  def foldLeft[From, To](list:List[From], defaultValue: To)(combine: (To,From) => To): To = {
+
+    var state: To = defaultValue
+    for (elem <- list) {
+      state = combine(state, elem)
+    }
+    state
+  }
 
   // e. Refactor `sum`, `size`, `min` and `wordCount` using the higher-order
   // function you defined above.
